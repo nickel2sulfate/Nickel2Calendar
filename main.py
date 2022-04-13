@@ -6,7 +6,11 @@ with Image.open("assets/cal.png") as cal:
 
     textLayer = Image.new("RGBA", cal.size, (255,255,255,0))
 
+<<<<<<< HEAD
     fnt = ImageFont.truetype("assets/Manrope-Light.ttf",100)
+=======
+    fnt = ImageFont.truetype("assets/lucon.ttf",100)
+>>>>>>> 3f09a69... Added Base Code
 
     brush = ImageDraw.Draw(textLayer)
 
