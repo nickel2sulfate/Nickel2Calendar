@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+import datetime
 
 color = (143, 56, 56, 255)
 times = []
@@ -56,3 +57,4 @@ with Image.open("assets/cal.png") as cal:
     output = Image.alpha_composite(cal, textLayer)
 
     output.show()
+    output.save(f"out/{datetime.datetime.now().strftime('%b-%d-%Y')}.png")
