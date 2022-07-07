@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import os
 
-template_dir = os.path.abspath('./assets/discord-schedule-generator-main/discord-schedule-generator-main')
+template_dir = os.path.abspath('templates')
 
 app = Flask(__name__,template_folder=template_dir,static_folder=template_dir)
 
