@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import os
 
-template_dir = os.path.abspath('templates')
-
-app = Flask(__name__,template_folder=template_dir,static_folder=template_dir)
+app = Flask(__name__)
 
 @app.route('/', methods=['GET','POST']) 
 def handleResponse():
