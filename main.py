@@ -1,19 +1,29 @@
 from PIL import Image, ImageDraw, ImageFont
 import datetime
 
+
 color = (143, 56, 56, 255)
+week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 times = []
 things = []
 
-for i in range(1, 8):
-    # TODO: This could be improved to say the actual days of the week...
-    newTime = input(f"What time do you want to stream on day {i} of the week?: ")
+for day in week:
+    newTime = input(f"What time do you want to stream on {day} of the week?: ")
+#if there is a blank space
+    if not newTime:
+        newTime = "--"
     times.append(newTime)
     newThing = input(f"What do you wanna do?: ")
+#if there is a blank space
+    if not newThing:
+        newThing = "--"
     things.append(newThing)
+    
 
-with Image.open("assets/cal.png") as cal:
-
+with Image.open("assets/cal.png") as cal, Image.open("assets/calTwiBase.png") as twit:
+    #print("width is:" , cal.width)
+    #print("height is:" , cal.height)
+    
     textLayer = Image.new("RGBA", cal.size, (255, 255, 255, 0))
 
 
@@ -40,6 +50,8 @@ with Image.open("assets/cal.png") as cal:
 
     baseLocation = [700, 385]
     offset = [0, 137]
+#this is for placing the original image on the twitter image in proper coordinate
+    twitterOffset = ((twit.width - cal.width)//2 , 0 )
     i = 0
     for thing in things:
         thisOffset = (
@@ -55,6 +67,8 @@ with Image.open("assets/cal.png") as cal:
         i = i + 1
 
     output = Image.alpha_composite(cal, textLayer)
-
+    twit.paste(output, twitterOffset)
     output.show()
+    twit.show()
     output.save(f"out/{datetime.datetime.now().strftime('%b-%d-%Y')}.png")
+    twit.save(f"out/twitter{datetime.datetime.now().strftime('%b-%d-%Y')}.png")
