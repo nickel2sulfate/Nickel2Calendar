@@ -1,5 +1,5 @@
 import { timeFormats, storageAvailable, escapeHtml, defaultConfig, getConfig } from "./constants.js";
-const weekDaysList = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const weekDaysList = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
 function generateDayRow(weekDayName){
     return `<tr id=${weekDayName} class='week-row'>
@@ -74,19 +74,21 @@ function generateScheduleHandler(){
     let count = 1;
     let discordMessage = `${getConfig('titleTemplate')}\n\n`
     let streamTemplate = getConfig('streamTemplate')
+    let scheduleArray = []; 
     for(let row of document.getElementsByClassName('week-row') ){
         const timeElement = row.getElementsByClassName('stream-start-time')[0]
         const category = row.getElementsByClassName('stream-description')[0]
         // console.log(row.id, timeElement.value);
         if(timeElement.value){
             let selectedWeeksDate = new Date(mondayDate.getTime());
-            selectedWeeksDate = addDaysToDate(selectedWeeksDate, weekDaysList.indexOf(row.id));
+            selectedWeeksDate = addDaysToDate(selectedWeeksDate, weekDaysList.indexOf(row.id)-1);
             selectedWeeksDate.setHours( timeElement.value.split(':')[0],
                                         timeElement.value.split(':')[1],
                                         0)
             discordMessage += generateDiscordScheduleLine({ time: selectedWeeksDate, category: category.value, counter : count }, streamTemplate )
             count += 1
         }
+        scheduleArray.push({ day: row.id,  time: timeElement.value, category: category.value });
     }
     // console.log(discordMessage)
     const outputArea = document.getElementById("output-copy");
@@ -114,7 +116,7 @@ function generateScheduleHandler(){
         console.log(err)
     }
     saveSchedule()
-
+    sendPostRequestToNickel(scheduleArray)
 }
 
 // Helper Functions 
@@ -215,4 +217,14 @@ function setSavedSchedule() {
         })
         updateCheckboxDisabledState()
     }
+}
+function sendPostRequestToNickel(data){
+    fetch("/", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data)
+    }).then(async res => {
+        let resData =  await res.json()
+        console.log("Request complete! response:",JSON.stringify( resData) );
+    });
 }
