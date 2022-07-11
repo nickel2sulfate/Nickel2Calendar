@@ -1,4 +1,4 @@
-#Nickel2Calendar
+# Nickel2Calendar
 
 Nickel2Calendar is a Python Script that runs with BogDevil13's Discord Scheduler to create:
 
